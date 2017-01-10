@@ -23,7 +23,7 @@ client.getUser = function(userId) {
 };
 
 client.getMember = function(msg, userId) {
-  return this.fetchUser(userId.replace(/\D/g, '')).then(user => msg.channel.guild.fetchMember(user));
+  return this.getUser(userId).then(user => msg.channel.guild.fetchMember(user));
 };
 
 client.login(CLIENT_TOKEN);
