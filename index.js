@@ -12,11 +12,22 @@ client.on('message', function(msg) {
     let command = args[0].replace(COMMAND_PREFIX, '');
     try {
       require('./commands/' + command)(client, msg, args);
+      handleRoleRequiredCommand('Moderator', command, msg, args);
+      handleRoleRequiredCommand('Administrator', command, msg, args);
+      handleRoleRequiredCommand('Owner', command, msg, args);
     } catch(err) {
       msg.channel.send('Unknown command.');
     }
   }
 });
+
+function handleRoleRequiredCommand(roleName, command, msg, args) {
+  client.getMember(msg, msg.author.id).then((member) => {
+    if (member.roles.exists('name', roleName)) {
+      require('./commands/' + roleName.toLowerCase() + '/' + command)(client, msg, args);
+    }
+  }).catch((err) => msg.channel.send(err.message));
+}
 
 client.getUser = function(userId) {
   return this.fetchUser(userId.replace(/\D/g, ''));
