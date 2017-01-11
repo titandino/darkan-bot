@@ -8,6 +8,8 @@ client.on('ready', () => console.log('Bot connected as ' + client.user.username)
 
 client.on('message', function(msg) {
   if (msg.content && msg.content.startsWith(COMMAND_PREFIX)) {
+    if (!msg.getAuthorAsGM())
+      return;
     let args = msg.content.split(' ');
     let command = args[0].replace(COMMAND_PREFIX, '');
     handleRoleRequiredCommand(null, command, msg, args);
@@ -17,9 +19,17 @@ client.on('message', function(msg) {
   }
 });
 
+Discord.Message.prototype.getAuthorAsGM = function() {
+  try {
+    return this.channel.guild.fetchMember(this.author);
+  } catch(err) {
+    return null;
+  }
+};
+
 function handleRoleRequiredCommand(roleName, command, msg, args) {
   if (roleName) {
-    client.getMember(msg, msg.author.id).then((member) => {
+    msg.getAuthorAsGM().then((member) => {
       if (member.roles.exists('name', roleName)) {
         require('./commands/' + roleName.toLowerCase() + '/' + command)(client, msg, args);
       }
