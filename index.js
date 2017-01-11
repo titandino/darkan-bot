@@ -10,23 +10,27 @@ client.on('message', function(msg) {
   if (msg.content && msg.content.startsWith(COMMAND_PREFIX)) {
     let args = msg.content.split(' ');
     let command = args[0].replace(COMMAND_PREFIX, '');
-    try {
-      require('./commands/' + command)(client, msg, args);
-      handleRoleRequiredCommand('Moderator', command, msg, args);
-      handleRoleRequiredCommand('Administrator', command, msg, args);
-      handleRoleRequiredCommand('Owner', command, msg, args);
-    } catch(err) {
-      msg.channel.send('Unknown command.');
-    }
+    handleRoleRequiredCommand(null, command, msg, args);
+    handleRoleRequiredCommand('Moderator', command, msg, args);
+    handleRoleRequiredCommand('Administrator', command, msg, args);
+    handleRoleRequiredCommand('Owner', command, msg, args);
   }
 });
 
 function handleRoleRequiredCommand(roleName, command, msg, args) {
-  client.getMember(msg, msg.author.id).then((member) => {
-    if (member.roles.exists('name', roleName)) {
-      require('./commands/' + roleName.toLowerCase() + '/' + command)(client, msg, args);
+  if (roleName) {
+    client.getMember(msg, msg.author.id).then((member) => {
+      if (member.roles.exists('name', roleName)) {
+        require('./commands/' + roleName.toLowerCase() + '/' + command)(client, msg, args);
+      }
+    }).catch(() => { /*empty*/ });
+  } else {
+    try {
+      require('./commands/' + command)(client, msg, args);
+    } catch(err) {
+      //empty
     }
-  }).catch((err) => msg.channel.send(err.message));
+  }
 }
 
 client.getUser = function(userId) {
