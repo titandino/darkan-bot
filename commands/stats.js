@@ -1,4 +1,5 @@
 const http = require('http');
+const asciiTable = require('ascii-table');
 
 const SKILL_NAMES = ['Overall', 'Attack', 'Defence', 'Strength', 'Constitution', 'Ranged', 'Prayer', 'Magic', 'Cooking', 'Woodcutting', 'Fletching', 'Fishing', 'Firemaking', 'Crafting', 'Smithing', 'Mining', 'Herblore', 'Agility', 'Thieving', 'Slayer', 'Farming', 'Runecrafting', 'Hunter', 'Construction', 'Summoning', 'Dungeoneering', 'Divination', 'Invention'];
 
@@ -8,10 +9,19 @@ module.exports = function(client, msg, args) {
     name += args[i] + ((i == args.length - 1) ? '' : ' ');
   }
   getStats(name).then((stats) => {
-    let response = JSON.stringify(stats).replace(new RegExp('},', 'g'), '},\r\n');
-    msg.channel.send(response);
+    msg.channel.send(formatStats(name, stats));
   }).catch((err) => msg.channel.send(err.message));
 };
+
+function formatStats(name, stats) {
+  let table = new asciiTable();
+  table.setTitle('VIEWING STATS FOR '+ name.toUpperCase());
+  table.setHeading('Skill', 'Level', 'Experience', 'Rank');
+  for (let i = 0;i < SKILL_NAMES.length;i++) {
+    table.addRow(SKILL_NAMES[i], stats[i].level, Intl.NumberFormat('en-US').format(stats[i].xp), Intl.NumberFormat('en-US').format(stats[i].rank));
+  }
+  return '```' + table.toString() + '```';
+}
 
 function getStats(name) {
   return new Promise(function(resolve, reject) {

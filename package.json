@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/titandino/darkan-bot#readme",
   "dependencies": {
+    "ascii-table": "0.0.9",
     "discord.js": "^11.0.0"
   },
   "devDependencies": {
