@@ -4,6 +4,8 @@ const client = new Discord.Client();
 const CLIENT_TOKEN = process.env.CLIENT_TOKEN || require('./config').CLIENT_TOKEN;
 const COMMAND_PREFIX = '.';
 
+console.log(Math.floor((Math.random() * 89999) + 10000).toString());
+
 client.on('ready', () => console.log('Bot connected as ' + client.user.username));
 
 client.on('message', function(msg) {
