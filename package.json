@@ -18,5 +18,13 @@
   "bugs": {
     "url": "https://github.com/titandino/darkan-bot/issues"
   },
-  "homepage": "https://github.com/titandino/darkan-bot#readme"
+  "homepage": "https://github.com/titandino/darkan-bot#readme",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "express": "^4.16.3",
+    "html-convert": "^2.1.7",
+    "is-valid-json": "^1.0.2",
+    "request": "^2.86.0",
+    "webshot": "^0.18.0"
+  }
 }
