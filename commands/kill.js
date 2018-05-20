@@ -11,11 +11,11 @@ let convert = htmlConvert({
 
 module.exports = function(client, msg, args) {
   let npcName = msg.content.substring(msg.content.indexOf(' ')+1);
-  request('http://localhost:5556/api/npc/'+npcName, (err, res, npcData) => {
+  request('http://darkan.org:5556/api/npc/'+npcName, (err, res, npcData) => {
     if (!isJSON(npcData))
       return msg.channel.send('Monster not found.');
     npcData = JSON.parse(npcData);
-    request('http://localhost:5556/api/npc/'+npcName+'/simdrop', (err, res, drop) => {
+    request('http://darkan.org:5556/api/npc/'+npcName+'/simdrop', (err, res, drop) => {
       drop = JSON.parse(drop);
       for (var i = 0;i < drop.length;i++) {
         if (drop[i].amount == 1)
