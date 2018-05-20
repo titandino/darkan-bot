@@ -9,6 +9,7 @@ const CLIENT_TOKEN = process.env.CLIENT_TOKEN || require('./config').CLIENT_TOKE
 const COMMAND_PREFIX = '.';
 
 client.on('ready', () => {
+  client.user.setGame('http://darkan.org')
   console.log('Bot connected as ' + client.user.username);
 });
 

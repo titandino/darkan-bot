@@ -17,25 +17,49 @@ module.exports = function(client, msg, args) {
     npcData = JSON.parse(npcData);
     request('http://localhost:5556/api/npc/'+npcName+'/simdrop', (err, res, drop) => {
       drop = JSON.parse(drop);
-      console.log(drop);
-      let imgStream = webshot('http://localhost', {
+      for (var i = 0;i < drop.length;i++) {
+        if (drop[i].amount == 1)
+          drop[i].amount = '';
+        else
+          drop[i].amount = drop[i].amount + ' ';
+      }
+      let imgStream = webshot('localhost', {
         quality: 100,
-        errorIfJSException: true,
         renderDelay: 5000,
+        errorIfJSException: true,
         screenSize: {
           width: 300,
-          height: 100
+          height: drop.length > 3 ? 200 : 80
         },
         onLoadFinished: {
           fn: function() {
-            for (let i = 0;i < this.drop.length;i++) {
-              document.getElementById(''+i).src = '/items/'+this.drop[i].id+'.png';
+            if (this.drop[0]) {
+              document.getElementById('d0').src = 'items/'+this.drop[0].id+'.png';
+              document.getElementById('n0').textContent = this.drop[0].amount + '' + this.drop[0].name;
             }
+            if (this.drop[1]) {
+              document.getElementById('d1').src = 'items/'+this.drop[1].id+'.png';
+              document.getElementById('n1').textContent = this.drop[1].amount + '' + this.drop[1].name;
+            }
+            if (this.drop[2]) {
+              document.getElementById('d2').src = 'items/'+this.drop[2].id+'.png';
+              document.getElementById('n2').textContent = this.drop[2].amount + '' + this.drop[2].name;
+            }
+            if (this.drop[3]) {
+              document.getElementById('d3').src = 'items/'+this.drop[3].id+'.png';
+              document.getElementById('n3').textContent = this.drop[3].amount + '' + this.drop[3].name;
+            }
+            if (this.drop[4]) {
+              document.getElementById('d4').src = 'items/'+this.drop[4].id+'.png';
+              document.getElementById('n4').textContent = this.drop[4].amount + '' + this.drop[4].name;
+            }
+            window.renderable = true;
           }, context: { drop: drop }
         }
       });
-      imgStream.on('data', data => {
-        msg.channel.send('You killed '+ npcData.name + '!', { file: { attachment: data, name: 'image.png' } });
+      imgStream.on('data', (data) => {
+        if (data.length > 100)
+          msg.channel.send('<@!' + msg.author.id + '> killed '+ npcData.name + '!', { file: { attachment: data, name: 'image.png' } });
       });
     });
   });

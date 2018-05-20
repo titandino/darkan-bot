@@ -1,0 +1,36 @@
+@font-face {
+    font-family: 'RuneScape UF';
+    src: url('RuneScape-UF.woff2') format('woff2'),
+        url('RuneScape-UF.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+  background-color: #444;
+}
+
+#dropDiv {
+  width: 400px;
+  display: inline-block;
+}
+
+p {
+  font-family: 'RuneScape UF';
+  font-weight: normal;
+  font-style: normal;
+  color: #ffff00;
+  text-shadow: 2px 2px #000000;
+  margin-top: 1px;
+  margin-bottom: 2px;
+  margin-right: 5px;
+}
+
+img {
+  margin: auto;
+}
+
+.drop {
+  display: inline-block;
+  text-align: center;
+}
