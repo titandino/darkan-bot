@@ -16,6 +16,8 @@ module.exports = function(client, msg, args) {
       return msg.channel.send('Monster not found.');
     npcData = JSON.parse(npcData);
     request('http://darkan.org:5556/api/npc/'+npcName+'/simdrop', (err, res, drop) => {
+      if (!isJSON(drop))
+        return msg.channel.send('API request timed out.');
       drop = JSON.parse(drop);
       for (var i = 0;i < drop.length;i++) {
         if (drop[i].amount == 1)
@@ -28,8 +30,8 @@ module.exports = function(client, msg, args) {
         renderDelay: 5000,
         errorIfJSException: true,
         screenSize: {
-          width: 300,
-          height: drop.length > 3 ? 200 : 80
+          width: drop.length > 3 ? 400 : 300,
+          height: drop.length > 4 ? 140 : 80
         },
         onLoadFinished: {
           fn: function() {
