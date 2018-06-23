@@ -2,10 +2,16 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
+const request = require('request');
+const moment = require('moment');
 
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(express.static('public'));
 
 const CLIENT_TOKEN = process.env.CLIENT_TOKEN || require('./config').CLIENT_TOKEN;
+const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK || require('./config').DISCORD_WEBHOOK;
 const COMMAND_PREFIX = '.';
 
 client.on('ready', () => {
@@ -49,8 +55,27 @@ client.getMember = function(msg, userId) {
   return this.getUser(userId).then(user => msg.channel.guild.fetchMember(user));
 };
 
-client.login(CLIENT_TOKEN);
+app.post('/bitbucket/webhook', (req, res) => {
+  let changes = req.body.push.changes;
+  if (changes) {
+    changes.forEach(change => {
+      change.commits.forEach(commit => {
+        if (!commit.message.startsWith('Merge')) {
+          request.post(DISCORD_WEBHOOK, {
+            form: {
+              username: 'Trent',
+              content: moment(commit.date).format("MMMM Do YYYY, h:mma") + ' - ' + commit.message,
+              avatar_url: 'https://bitbucket.org/account/titandino/avatar/256/'
+            }
+          }, function (err, res, body) { });
+        }
+      });
+    });
+  }
+});
 
+
+client.login(CLIENT_TOKEN);
 const server = app.listen(80, function() {
   console.log('Local server listening at http://' + server.address().address + ':' + server.address().port);
 });
