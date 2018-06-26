@@ -72,6 +72,7 @@ app.post('/bitbucket/webhook', (req, res) => {
       });
     });
   }
+  res.end('Success');
 });
 
 
