@@ -55,21 +55,19 @@ client.getMember = function(msg, userId) {
   return this.getUser(userId).then(user => msg.channel.guild.fetchMember(user));
 };
 
-app.post('/bitbucket/webhook', (req, res) => {
-  let changes = req.body.push.changes;
-  if (changes) {
-    changes.forEach(change => {
-      change.commits.forEach(commit => {
-        if (!commit.message.startsWith('Merge')) {
-          request.post(DISCORD_WEBHOOK, {
-            form: {
-              username: 'Trent',
-              content: moment(commit.date).format("MMMM Do YYYY, h:mma") + ' - ' + commit.message,
-              avatar_url: 'https://bitbucket.org/account/titandino/avatar/256/'
-            }
-          }, function (err, res, body) { });
-        }
-      });
+app.post('/github/webhook', (req, res) => {
+  let commits = req.body.commits;
+  if (commits) {
+    commits.forEach(commit => {
+      if (!commit.message.startsWith('Merge')) {
+        request.post(DISCORD_WEBHOOK, {
+          form: {
+            username: commit.author.name,
+            content: moment(commit.timestamp).format("MMMM Do YYYY, h:mma") + ' - ' + commit.message,
+            avatar_url: 'https://avatars0.githubusercontent.com/u/16010013?s=460&v=4'
+          }
+        }, function (err, res, body) { });
+      }
     });
   }
   res.end('Success');
