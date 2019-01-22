@@ -15,7 +15,12 @@ const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK || require('./config').DISCO
 const COMMAND_PREFIX = '.';
 
 client.on('ready', () => {
-  client.user.setActivity('Darkan - 2012 Remake');
+  client.user.setPresence({
+    game: {
+      name: 'http://darkan.org',
+      type: 0
+    }
+  });
   console.log('Bot connected as ' + client.user.username);
 });
 
@@ -54,25 +59,6 @@ client.getUser = function(userId) {
 client.getMember = function(msg, userId) {
   return this.getUser(userId).then(user => msg.channel.guild.fetchMember(user));
 };
-
-app.post('/github/webhook', (req, res) => {
-  let commits = req.body.commits;
-  if (commits) {
-    commits.forEach(commit => {
-      if (!commit.message.startsWith('Merge')) {
-        request.post(DISCORD_WEBHOOK, {
-          form: {
-            username: commit.author.name,
-            content: moment(commit.timestamp).format("MMMM Do YYYY, h:mma") + ' - ' + commit.message,
-            avatar_url: 'https://avatars0.githubusercontent.com/u/16010013?s=460&v=4'
-          }
-        }, function (err, res, body) { });
-      }
-    });
-  }
-  res.end('Success');
-});
-
 
 client.login(CLIENT_TOKEN);
 const server = app.listen(80, function() {
