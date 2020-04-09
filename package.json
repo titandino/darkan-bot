@@ -21,13 +21,13 @@
   "homepage": "https://github.com/titandino/darkan-bot#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "capture-website": "^0.8.1",
     "discord.js": "^11.5.1",
     "express": "^4.17.1",
     "html-convert": "^2.1.7",
     "is-valid-json": "^1.0.2",
     "moment": "^2.24.0",
     "phantom": "^6.3.0",
-    "request": "^2.88.0",
-    "webshot": "^0.18.0"
+    "request": "^2.88.0"
   }
 }
