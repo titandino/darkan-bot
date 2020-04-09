@@ -11,7 +11,6 @@ app.use(bodyParser.json());
 app.use(express.static('public'));
 
 const CLIENT_TOKEN = process.env.CLIENT_TOKEN || require('./config').CLIENT_TOKEN;
-const DISCORD_WEBHOOK = process.env.DISCORD_WEBHOOK || require('./config').DISCORD_WEBHOOK;
 const COMMAND_PREFIX = '.';
 
 client.on('ready', () => {
