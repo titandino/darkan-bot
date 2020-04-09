@@ -10,13 +10,11 @@ let convert = htmlConvert({
 module.exports = function(client, msg, args) {
   let npcName = msg.content.substring(msg.content.indexOf(' ')+1);
   request('https://darkan.org/api/npc/'+npcName, (err, res, npcData) => {
-    if (npcData.error)
-      return msg.channel.send('Monster not found.');
     npcData = JSON.parse(npcData);
     request('https://darkan.org/api/npc/'+npcName+'/simdrop', (err, res, drop) => {
-      if (npcData.error)
-        return msg.channel.send('Error requesting simulated drop.');
       drop = JSON.parse(drop);
+	  if (!drop || drop.length < 0)
+		  return msg.channel.send('Error requesting simulated drop.');
       for (var i = 0;i < drop.length;i++) {
         if (drop[i].amount == 1)
           drop[i].amount = '';
@@ -46,15 +44,19 @@ module.exports = function(client, msg, args) {
               document.getElementById('n3').textContent = drops[3].amount + '' + drops[3].name;
             }
             if (drops[4]) {
-              document.getElementById('d4').src = 'items/'+drop[4].id+'.png';
+              document.getElementById('d4').src = 'items/'+drops[4].id+'.png';
               document.getElementById('n4').textContent = drops[4].amount + '' + drops[4].name;
+            }
+			if (drops[5]) {
+              document.getElementById('d4').src = 'items/'+drops[5].id+'.png';
+              document.getElementById('n4').textContent = drops[5].amount + '' + drops[5].name;
             }
             window.renderable = true;
           }, drop);
         }
       }).then((data) => {
         if (data.length > 100)
-          msg.channel.send('<@!' + msg.author.id + '> killed '+ npcData.name + '!', { file: { attachment: data, name: 'image.png' } });
+          msg.channel.send('<@!' + msg.author.id + '> killed '+ ((npcData && npcData.name) ? npcData.name : npcName) + '!', { file: { attachment: data, name: 'image.png' } });
       });
     });
   });
