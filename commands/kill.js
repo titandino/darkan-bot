@@ -25,10 +25,8 @@ module.exports = function(client, msg, args) {
       }
       captureWebsite.buffer('http://localhost', {
         renderDelay: 5000,
-        screenSize: {
-          width: drop.length > 3 ? 400 : 300,
-          height: drop.length > 4 ? 140 : 80
-        },
+        width: drop.length > 3 ? 400 : 300,
+        height: drop.length > 4 ? 140 : 80,
         beforeScreenshot: (page, browser) => {
           page.evaluate((drops) => {
             if (drops[0]) {
