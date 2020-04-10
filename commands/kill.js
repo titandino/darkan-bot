@@ -13,7 +13,7 @@ module.exports = function(client, msg, args) {
     npcData = JSON.parse(npcData);
     request('https://darkan.org/api/npc/'+npcName+'/simdrop', (err, res, drop) => {
       drop = JSON.parse(drop);
-	  if (!drop || drop.length < 0)
+	  if (!drop || drop.length <= 0)
 		  return msg.channel.send('Error requesting simulated drop.');
       for (var i = 0;i < drop.length;i++) {
         if (drop[i].amount == 1)
